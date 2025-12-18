@@ -3,6 +3,7 @@ package com.jangada.RADAR.models.dtos;
 import java.util.List;
 import java.util.Set;
 
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +15,15 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UsuarioDTO {
     private Long id;
+    
+    @NotBlank(message = "Nome é obrigatório")
     private String nome;
+    
+    @NotBlank(message = "Matrícula é obrigatória")
     private String matricula;
+    
+    @NotBlank(message = "Email é obrigatório")
+    @Email(message = "Email inválido")
     private String email;
 
     private Integer limiteMatricula;

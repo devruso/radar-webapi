@@ -20,4 +20,16 @@ public class TurmaMapper {
                 .build();
     }
 
+    public static Turma toEntity(TurmaDTO dto) {
+        if (dto == null) return null;
+        Turma t = new Turma();
+        t.setId(dto.getId());
+        t.setLocal(dto.getLocal());
+        t.setProfessor(dto.getProfessor());
+        t.setNumero(dto.getNumero());
+        t.setTipo(dto.getTipo());
+        // associations must be set at service layer or by client
+        return t;
+    }
+
 }
