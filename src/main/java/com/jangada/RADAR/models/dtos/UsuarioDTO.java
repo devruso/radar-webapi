@@ -31,6 +31,10 @@ public class UsuarioDTO {
     private Integer tempoEstudo;
     private Integer tempoTransporte;
 
+    // UFBA: ano de ingresso (ex.: 2025.2) e período atual
+    private String anoIngresso;
+    private Integer periodoAtual;
+
     private List<Boolean> turnosLivres;
     private Set<String> professoresExcluidos;
     private Set<String> disciplinasFeitas;

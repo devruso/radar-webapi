@@ -42,6 +42,10 @@ public class Usuario {
     private Integer tempoEstudo;
     private Integer tempoTransporte;
 
+    // UFBA: ano de ingresso (ex.: 2025.2) e período atual
+    private String anoIngresso;
+    private Integer periodoAtual;
+
     @ElementCollection
     @CollectionTable(name = "usuario_turnos_livres", joinColumns = @JoinColumn(name = "usuario_id"))
     @Column(name = "livre")
