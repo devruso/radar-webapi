@@ -1,16 +1,23 @@
 package com.jangada.RADAR.controllers;
 
-import com.jangada.RADAR.models.dtos.UsuarioDTO;
-import com.jangada.RADAR.mappers.UsuarioMapper;
-import com.jangada.RADAR.models.entities.Usuario;
-import com.jangada.RADAR.repositories.UsuarioRepository;
-import com.jangada.RADAR.exceptions.ResourceNotFoundException;
-import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.jangada.RADAR.exceptions.ResourceNotFoundException;
+import com.jangada.RADAR.mappers.UsuarioMapper;
+import com.jangada.RADAR.models.dtos.UsuarioDTO;
+import com.jangada.RADAR.models.entities.Usuario;
+import com.jangada.RADAR.repositories.UsuarioRepository;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/usuarios")

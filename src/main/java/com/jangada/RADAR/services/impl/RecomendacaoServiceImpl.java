@@ -1,18 +1,18 @@
 package com.jangada.RADAR.services.impl;
 
-import com.jangada.RADAR.models.dtos.TurmaDTO;
-import com.jangada.RADAR.models.entities.Usuario;
-import com.jangada.RADAR.repositories.UsuarioRepository;
-import com.jangada.RADAR.repositories.TurmaRepository;
-import com.jangada.RADAR.services.RecomendacaoService;
-import com.jangada.RADAR.mappers.TurmaMapper;
-import com.jangada.RADAR.exceptions.ResourceNotFoundException;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.jangada.RADAR.exceptions.ResourceNotFoundException;
+import com.jangada.RADAR.mappers.TurmaMapper;
+import com.jangada.RADAR.models.dtos.TurmaDTO;
+import com.jangada.RADAR.models.entities.Usuario;
+import com.jangada.RADAR.repositories.TurmaRepository;
+import com.jangada.RADAR.repositories.UsuarioRepository;
+import com.jangada.RADAR.services.RecomendacaoService;
 
 @Service
 @Transactional
