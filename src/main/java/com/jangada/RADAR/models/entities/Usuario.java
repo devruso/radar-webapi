@@ -37,14 +37,21 @@ public class Usuario {
     private String nome;
     private String matricula;
     private String email;
+    private String senha; // BCrypt hash
 
     private Integer limiteMatricula;
     private Integer tempoEstudo;
     private Integer tempoTransporte;
 
-    // UFBA: ano de ingresso (ex.: 2025.2) e período atual
-    private String anoIngresso;
+    // UFBA: ano de ingresso (ex.: 2025) e mês (ex.: 3 para março) e período atual
+    private Integer anoIngresso;
+    private Integer mesIngresso;
     private Integer periodoAtual;
+
+    // Flag para diferenciar usuário teste (sem cadastro) de usuário autenticado
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean isTeste = false;
 
     @ElementCollection
     @CollectionTable(name = "usuario_turnos_livres", joinColumns = @JoinColumn(name = "usuario_id"))

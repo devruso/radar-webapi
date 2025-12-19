@@ -17,8 +17,10 @@ public class UsuarioMapper {
                 .limiteMatricula(u.getLimiteMatricula())
                 .tempoEstudo(u.getTempoEstudo())
                 .tempoTransporte(u.getTempoTransporte())
-            .anoIngresso(u.getAnoIngresso())
-            .periodoAtual(u.getPeriodoAtual())
+                .anoIngresso(u.getAnoIngresso())
+                .mesIngresso(u.getMesIngresso())
+                .periodoAtual(u.getPeriodoAtual())
+                .isTeste(u.getIsTeste())
                 .turnosLivres(u.getTurnosLivres())
                 .professoresExcluidos(u.getProfessoresExcluidos())
                 .disciplinasFeitas(u.getDisciplinasFeitas())
@@ -38,7 +40,9 @@ public class UsuarioMapper {
         u.setTempoEstudo(dto.getTempoEstudo());
         u.setTempoTransporte(dto.getTempoTransporte());
         u.setAnoIngresso(dto.getAnoIngresso());
+        u.setMesIngresso(dto.getMesIngresso());
         u.setPeriodoAtual(dto.getPeriodoAtual());
+        u.setIsTeste(dto.getIsTeste());
         u.setTurnosLivres(dto.getTurnosLivres());
         u.setProfessoresExcluidos(dto.getProfessoresExcluidos());
         u.setDisciplinasFeitas(dto.getDisciplinasFeitas());
