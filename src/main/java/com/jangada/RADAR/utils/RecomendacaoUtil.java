@@ -1,5 +1,10 @@
 package com.jangada.RADAR.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.jangada.RADAR.models.entities.AvaliacaoProfessor;
 import com.jangada.RADAR.models.entities.ComponenteCurricular;
 import com.jangada.RADAR.models.entities.PreRequisito;
@@ -7,12 +12,6 @@ import com.jangada.RADAR.models.entities.Turma;
 import com.jangada.RADAR.models.entities.Usuario;
 import com.jangada.RADAR.repositories.AvaliacaoProfessorRepository;
 import com.jangada.RADAR.repositories.PreRequisitoRepository;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Utilitário para lógica de recomendação de disciplinas.
