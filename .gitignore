@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Temporary documentation files
+BACKEND_ENDPOINTS.md
+GUIA_TESTE_RAPIDO.md
+NOVOS_ENDPOINTS.md
+PERFORMANCE_OPTIMIZATION.md
+RESUMO_IMPLEMENTACAO.md
