@@ -35,6 +35,12 @@
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
 		</dependency>
+		<!-- Flyway plugin database support for PostgreSQL (Flyway v11 modular driver) -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+			<version>11.14.1</version>
+		</dependency>
 
 		<!-- Swagger/OpenAPI UI via Springdoc -->
 		<dependency>
