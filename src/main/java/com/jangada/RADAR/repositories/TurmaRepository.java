@@ -12,16 +12,44 @@ import com.jangada.RADAR.models.entities.Turma;
 @Repository
 public interface TurmaRepository extends JpaRepository<Turma, Long> {
     
-    @Query("SELECT t FROM Turma t WHERE t.componenteCurricular.id = :componenteId")
+    // Otimizado com FETCH JOIN para evitar N+1 queries
+    @Query("SELECT DISTINCT t FROM Turma t " +
+           "LEFT JOIN FETCH t.componenteCurricular " +
+           "LEFT JOIN FETCH t.horario " +
+           "LEFT JOIN FETCH t.vagas " +
+           "LEFT JOIN FETCH t.guiaMatricula")
+    List<Turma> findAllWithDetails();
+    
+    @Query("SELECT DISTINCT t FROM Turma t " +
+           "LEFT JOIN FETCH t.componenteCurricular " +
+           "LEFT JOIN FETCH t.horario " +
+           "LEFT JOIN FETCH t.vagas " +
+           "LEFT JOIN FETCH t.guiaMatricula " +
+           "WHERE t.componenteCurricular.id = :componenteId")
     List<Turma> findByComponenteId(@Param("componenteId") Long componenteId);
     
-    @Query("SELECT t FROM Turma t WHERE t.professor = :professor")
+    @Query("SELECT DISTINCT t FROM Turma t " +
+           "LEFT JOIN FETCH t.componenteCurricular " +
+           "LEFT JOIN FETCH t.horario " +
+           "LEFT JOIN FETCH t.vagas " +
+           "LEFT JOIN FETCH t.guiaMatricula " +
+           "WHERE t.professor = :professor")
     List<Turma> findByProfessor(@Param("professor") String professor);
     
-    @Query("SELECT t FROM Turma t WHERE t.guiaMatricula.id = :guiaId")
+    @Query("SELECT DISTINCT t FROM Turma t " +
+           "LEFT JOIN FETCH t.componenteCurricular " +
+           "LEFT JOIN FETCH t.horario " +
+           "LEFT JOIN FETCH t.vagas " +
+           "LEFT JOIN FETCH t.guiaMatricula " +
+           "WHERE t.guiaMatricula.id = :guiaId")
     List<Turma> findByGuiaId(@Param("guiaId") Long guiaId);
     
-    @Query("SELECT t FROM Turma t WHERE t.tipo = :tipo")
+    @Query("SELECT DISTINCT t FROM Turma t " +
+           "LEFT JOIN FETCH t.componenteCurricular " +
+           "LEFT JOIN FETCH t.horario " +
+           "LEFT JOIN FETCH t.vagas " +
+           "LEFT JOIN FETCH t.guiaMatricula " +
+           "WHERE t.tipo = :tipo")
     List<Turma> findByTipo(@Param("tipo") Byte tipo);
 }
 

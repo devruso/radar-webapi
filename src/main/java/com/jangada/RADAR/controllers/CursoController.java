@@ -26,13 +26,18 @@ public class CursoController {
 
     @GetMapping
     public ResponseEntity<List<CursoDTO>> listAll() {
-        List<CursoDTO> dtos = cursoRepository.findAll().stream().map(CursoMapper::toDto).collect(Collectors.toList());
+        // Usa query otimizada com FETCH JOIN para evitar N+1 queries
+        List<CursoDTO> dtos = cursoRepository.findAllWithDetails()
+                .stream()
+                .map(CursoMapper::toDto)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CursoDTO> getOne(@PathVariable Long id) {
-        return cursoRepository.findById(id)
+        // Usa query otimizada com FETCH JOIN para evitar N+1 queries
+        return cursoRepository.findByIdWithDetails(id)
                 .map(c -> ResponseEntity.ok(CursoMapper.toDto(c)))
                 .orElseThrow(() -> new ResourceNotFoundException("Curso com ID " + id + " não encontrado"));
     }

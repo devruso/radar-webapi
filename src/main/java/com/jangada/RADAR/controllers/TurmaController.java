@@ -27,7 +27,10 @@ public class TurmaController {
 
     @GetMapping
     public ResponseEntity<List<TurmaDTO>> listAll() {
-        List<TurmaDTO> dtos = turmaRepository.findAll().stream().map(TurmaMapper::toDto).collect(Collectors.toList());
+        // Usa query otimizada com FETCH JOIN para evitar N+1 queries
+        List<TurmaDTO> dtos = turmaRepository.findAllWithDetails().stream()
+                .map(TurmaMapper::toDto)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
 
