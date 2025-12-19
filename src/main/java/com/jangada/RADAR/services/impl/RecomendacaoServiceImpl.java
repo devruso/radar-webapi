@@ -49,11 +49,12 @@ public class RecomendacaoServiceImpl implements RecomendacaoService {
 
     @Override
     public List<RecomendacaoTurmaDTO> recomendar(Long usuarioId, String metodo) {
-        Usuario usuario = usuarioRepository.findById(usuarioId)
+        // Usa query otimizada com FETCH JOIN
+        Usuario usuario = usuarioRepository.findByIdWithDetails(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
-        // Obter todas as turmas disponíveis
-        List<Turma> todasAsTurmas = turmaRepository.findAll();
+        // Obter todas as turmas com FETCH JOIN para evitar N+1 queries
+        List<Turma> todasAsTurmas = turmaRepository.findAllWithDetails();
 
         // PASSO 1: FILTRAR
         List<Turma> turmasFiltradasFiltradas = RecomendacaoUtil.filtrarTurmas(

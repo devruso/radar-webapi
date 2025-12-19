@@ -49,17 +49,27 @@ public class RecomendacaoUtil {
             AvaliacaoProfessorRepository avaliacaoRepo,
             PreRequisitoRepository preReqRepo) {
 
+        Set<String> disciplinasFeitas = usuario.getDisciplinasFeitas() == null
+                ? Set.of()
+                : usuario.getDisciplinasFeitas();
+        Set<String> professoresBanidos = usuario.getProfessoresExcluidos() == null
+            ? Set.of()
+            : usuario.getProfessoresExcluidos();
+
         return turmasDisponiveis.stream()
                 .filter(turma -> {
                     ComponenteCurricular comp = turma.getComponenteCurricular();
+                    if (comp == null) {
+                        return false; // turma inconsistente: sem componente
+                    }
 
                     // 1. Já fez a disciplina?
-                    if (usuario.getDisciplinasFeitas().contains(comp.getCodigo())) {
+                    if (disciplinasFeitas.contains(comp.getCodigo())) {
                         return false;
                     }
 
                     // 2. Professor excluído?
-                    if (usuario.getProfessoresExcluidos().contains(turma.getProfessor())) {
+                    if (professoresBanidos.contains(turma.getProfessor())) {
                         return false;
                     }
 
@@ -69,7 +79,12 @@ public class RecomendacaoUtil {
                     }
 
                     // 4. Pré-requisitos atendidos?
-                    if (!verificarPreRequisitos(comp, usuario.getDisciplinasFeitas(), preReqRepo)) {
+                    if (!verificarPreRequisitos(comp, disciplinasFeitas, preReqRepo)) {
+                        return false;
+                    }
+
+                    // 5. Turno disponível?
+                    if (!verificarTurnoDisponivel(turma, usuario.getTurnosLivres())) {
                         return false;
                     }
 
@@ -86,6 +101,10 @@ public class RecomendacaoUtil {
             Set<String> disciplinasFeitas,
             PreRequisitoRepository preReqRepo) {
 
+        if (componente == null) {
+            return false;
+        }
+
         List<PreRequisito> preReqs = preReqRepo.findByComponenteIdAndTipo(componente.getId(), "PREREQUISITO");
 
         for (PreRequisito preReq : preReqs) {
@@ -96,6 +115,45 @@ public class RecomendacaoUtil {
         }
 
         return true;
+    }
+
+    /**
+     * Verifica se a turma está disponível nos turnos livres do usuário.
+     * Índices: 0 = matutino, 1 = vespertino, 2 = noturno
+     * Se turnosLivres estiver vazio ou null, aceita qualquer turno.
+     */
+    public static boolean verificarTurnoDisponivel(Turma turma, List<Boolean> turnosLivres) {
+        if (turnosLivres == null || turnosLivres.isEmpty()) {
+            return true; // Sem restrição de turno
+        }
+
+        // Verifica se turma tem horário definido
+        if (turma.getHorario() == null) {
+            return true; // Sem horário definido, aceita
+        }
+
+        // Mapeia turno da turma para índice (0, 1, 2)
+        Integer indiceTurno = mapearTurnoParaIndice(turma.getHorario().getTurno());
+        if (indiceTurno == null || indiceTurno >= turnosLivres.size()) {
+            return true; // Turno não mapeado ou fora da lista, aceita
+        }
+
+        return turnosLivres.get(indiceTurno);
+    }
+
+    /**
+     * Mapeia string de turno para índice na lista turnosLivres.
+     * 0 = matutino, 1 = vespertino, 2 = noturno
+     */
+    private static Integer mapearTurnoParaIndice(String turno) {
+        if (turno == null) return null;
+        
+        String turnoLower = turno.toLowerCase().trim();
+        if (turnoLower.contains("matutino") || turnoLower.contains("manhã")) return 0;
+        if (turnoLower.contains("vespertino") || turnoLower.contains("tarde")) return 1;
+        if (turnoLower.contains("noturno") || turnoLower.contains("noite")) return 2;
+        
+        return null;
     }
 
     /**
@@ -127,7 +185,7 @@ public class RecomendacaoUtil {
      * DIFICIL: nível >= 5
      */
     public static String classificarDificuldade(ComponenteCurricular componente) {
-        if (componente.getNivel() == null) {
+        if (componente == null || componente.getNivel() == null) {
             return "INTERMEDIO";
         }
 
@@ -151,6 +209,10 @@ public class RecomendacaoUtil {
 
         for (Turma turma : turmas) {
             ComponenteCurricular comp = turma.getComponenteCurricular();
+            if (comp == null) {
+                continue; // ignora turmas mal formadas
+            }
+
             String dificuldade = classificarDificuldade(comp);
             Double scoreProfessor = calcularScoreProfessor(turma.getProfessor(), comp.getId(), avaliacaoRepo);
 
@@ -204,9 +266,15 @@ public class RecomendacaoUtil {
             int minimo,
             int maximo) {
 
-        // Por enquanto, retorna entre min e max sem validar conflito de horário
+        // Por enquanto, retorna entre min e max sem validar conflito de horário.
+        // Se houver menos que o mínimo disponível, devolve apenas o que existir para evitar erro de índice.
         // TODO: implementar validação de conflito de horário
-        int quantidade = Math.min(maximo, Math.max(minimo, recomendacoes.size()));
-        return recomendacoes.subList(0, quantidade);
+        int quantidade = Math.min(maximo, recomendacoes.size());
+
+        if (quantidade <= 0) {
+            return List.of();
+        }
+
+        return new ArrayList<>(recomendacoes.subList(0, quantidade));
     }
 }
