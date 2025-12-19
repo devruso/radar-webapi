@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: radar-postgres
+    environment:
+      POSTGRES_DB: radar
+      POSTGRES_USER: radar
+      POSTGRES_PASSWORD: radar123
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - radar-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: radar-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@radar.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - radar-network
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+networks:
+  radar-network:
+    driver: bridge
