@@ -1,9 +1,9 @@
 package com.jangada.RADAR.mappers;
 
+import java.util.stream.Collectors;
+
 import com.jangada.RADAR.models.dtos.UsuarioDTO;
 import com.jangada.RADAR.models.entities.Usuario;
-
-import java.util.stream.Collectors;
 
 public class UsuarioMapper {
 
