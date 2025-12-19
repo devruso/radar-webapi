@@ -1,10 +1,9 @@
 package com.jangada.RADAR.services;
 
+import java.util.List;
+
 import com.jangada.RADAR.models.dtos.AvaliacaoProfessorDTO;
 import com.jangada.RADAR.models.dtos.RecomendacaoTurmaDTO;
-import com.jangada.RADAR.models.dtos.TurmaDTO;
-
-import java.util.List;
 
 public interface RecomendacaoService {
 
