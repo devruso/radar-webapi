@@ -92,39 +92,51 @@ SELECT 'MATA50-T1', 'Noturno'
 WHERE NOT EXISTS (SELECT 1 FROM horarios WHERE codigo='MATA50-T1');
 
 -- Vagas e turmas UFBA (Sistemas de Informação)
-INSERT INTO vagas (total_vagas) SELECT 50 WHERE NOT EXISTS (SELECT 1 FROM vagas);
 
 -- Cálculo B
-INSERT INTO turmas (local, numero, professor, tipo, componente_id, guia_id, horario_id, vagas_id)
-SELECT 'IME - UFBA', 'T1', 'Prof. Maria Gaetana Agnesi', 1,
-       (SELECT id FROM componentes_curriculares WHERE codigo='MATA03'),
-       (SELECT id FROM guias_matricula WHERE curso_id = (SELECT id FROM cursos WHERE nome='Sistemas de Informação')),
-       (SELECT id FROM horarios WHERE codigo='MATA03-T1'),
-       (SELECT MAX(id) FROM vagas)
-WHERE NOT EXISTS (
-  SELECT 1 FROM turmas WHERE numero='T1' AND componente_id=(SELECT id FROM componentes_curriculares WHERE codigo='MATA03')
-);
+DO $$
+DECLARE
+    v_vagas_id bigint;
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM turmas WHERE numero='T1' AND componente_id=(SELECT id FROM componentes_curriculares WHERE codigo='MATA03')) THEN
+        INSERT INTO vagas (total_vagas) VALUES (50) RETURNING id INTO v_vagas_id;
+        INSERT INTO turmas (local, numero, professor, tipo, componente_id, guia_id, horario_id, vagas_id)
+        VALUES ('IME - UFBA', 'T1', 'Prof. Maria Gaetana Agnesi', 1,
+                (SELECT id FROM componentes_curriculares WHERE codigo='MATA03'),
+                (SELECT id FROM guias_matricula WHERE curso_id = (SELECT id FROM cursos WHERE nome='Sistemas de Informação')),
+                (SELECT id FROM horarios WHERE codigo='MATA03-T1'),
+                v_vagas_id);
+    END IF;
+END $$;
 
 -- Introdução ao Raciocínio Computacional
-INSERT INTO vagas (total_vagas) VALUES (60);
-INSERT INTO turmas (local, numero, professor, tipo, componente_id, guia_id, horario_id, vagas_id)
-SELECT 'ICE - UFBA', 'T1', 'Prof. Ada Lovelace', 1,
-       (SELECT id FROM componentes_curriculares WHERE codigo='MATF57'),
-       (SELECT id FROM guias_matricula WHERE curso_id = (SELECT id FROM cursos WHERE nome='Sistemas de Informação')),
-       (SELECT id FROM horarios WHERE codigo='MATF57-T1'),
-       (SELECT MAX(id) FROM vagas)
-WHERE NOT EXISTS (
-  SELECT 1 FROM turmas WHERE numero='T1' AND componente_id=(SELECT id FROM componentes_curriculares WHERE codigo='MATF57')
-);
+DO $$
+DECLARE
+    v_vagas_id bigint;
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM turmas WHERE numero='T1' AND componente_id=(SELECT id FROM componentes_curriculares WHERE codigo='MATF57')) THEN
+        INSERT INTO vagas (total_vagas) VALUES (60) RETURNING id INTO v_vagas_id;
+        INSERT INTO turmas (local, numero, professor, tipo, componente_id, guia_id, horario_id, vagas_id)
+        VALUES ('ICE - UFBA', 'T1', 'Prof. Ada Lovelace', 1,
+                (SELECT id FROM componentes_curriculares WHERE codigo='MATF57'),
+                (SELECT id FROM guias_matricula WHERE curso_id = (SELECT id FROM cursos WHERE nome='Sistemas de Informação')),
+                (SELECT id FROM horarios WHERE codigo='MATF57-T1'),
+                v_vagas_id);
+    END IF;
+END $$;
 
 -- Linguagens Formais e Autômatos
-INSERT INTO vagas (total_vagas) VALUES (45);
-INSERT INTO turmas (local, numero, professor, tipo, componente_id, guia_id, horario_id, vagas_id)
-SELECT 'ICE - UFBA', 'T1', 'Prof. Noam Chomsky', 1,
-       (SELECT id FROM componentes_curriculares WHERE codigo='MATA50'),
-       (SELECT id FROM guias_matricula WHERE curso_id = (SELECT id FROM cursos WHERE nome='Sistemas de Informação')),
-       (SELECT id FROM horarios WHERE codigo='MATA50-T1'),
-       (SELECT MAX(id) FROM vagas)
-WHERE NOT EXISTS (
-  SELECT 1 FROM turmas WHERE numero='T1' AND componente_id=(SELECT id FROM componentes_curriculares WHERE codigo='MATA50')
-);
+DO $$
+DECLARE
+    v_vagas_id bigint;
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM turmas WHERE numero='T1' AND componente_id=(SELECT id FROM componentes_curriculares WHERE codigo='MATA50')) THEN
+        INSERT INTO vagas (total_vagas) VALUES (45) RETURNING id INTO v_vagas_id;
+        INSERT INTO turmas (local, numero, professor, tipo, componente_id, guia_id, horario_id, vagas_id)
+        VALUES ('ICE - UFBA', 'T1', 'Prof. Noam Chomsky', 1,
+                (SELECT id FROM componentes_curriculares WHERE codigo='MATA50'),
+                (SELECT id FROM guias_matricula WHERE curso_id = (SELECT id FROM cursos WHERE nome='Sistemas de Informação')),
+                (SELECT id FROM horarios WHERE codigo='MATA50-T1'),
+                v_vagas_id);
+    END IF;
+END $$;

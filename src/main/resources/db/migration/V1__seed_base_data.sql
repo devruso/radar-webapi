@@ -26,38 +26,36 @@ VALUES ('2025.1', (SELECT id FROM cursos WHERE nome='Ciência da Computação'))
 -- Atualiza cursos para vincular guia
 UPDATE cursos SET guia_id = (SELECT id FROM guias_matricula WHERE curso_id = cursos.id) WHERE guia_id IS NULL;
 
--- Componentes curriculares (disciplinas)
 INSERT INTO componentes_curriculares (codigo, nome, nivel, tipo, ementa, prerequisito, corequisito, posrequisito, estrutura_id)
-VALUES ('MDIS', 'Matemática Discreta', 1, 'Obrigatória', 'Conjuntos, relações, grafos, lógica, combinatória', NULL, NULL, NULL,
+VALUES ('MDIS', 'Matemática Discreta', 1, 'Obrigatória', NULL, NULL, NULL, NULL,
         (SELECT id FROM estrutura_curso WHERE codigo='SI-2025'));
 
 INSERT INTO componentes_curriculares (codigo, nome, nivel, tipo, ementa, prerequisito, corequisito, posrequisito, estrutura_id)
-VALUES ('CALCA', 'Cálculo A', 1, 'Obrigatória', 'Funções, limites, derivadas, aplicações', NULL, NULL, NULL,
+VALUES ('CALCA', 'Cálculo A', 1, 'Obrigatória', NULL, NULL, NULL, NULL,
         (SELECT id FROM estrutura_curso WHERE codigo='SI-2025'));
 
 INSERT INTO componentes_curriculares (codigo, nome, nivel, tipo, ementa, prerequisito, corequisito, posrequisito, estrutura_id)
-VALUES ('ILP', 'Introdução à Lógica de Programação', 1, 'Obrigatória', 'Algoritmos, estruturas de controle, funções', NULL, NULL, NULL,
+VALUES ('ILP', 'Introdução à Lógica de Programação', 1, 'Obrigatória', NULL, NULL, NULL, NULL,
         (SELECT id FROM estrutura_curso WHERE codigo='SI-2025'));
 
 INSERT INTO componentes_curriculares (codigo, nome, nivel, tipo, ementa, prerequisito, corequisito, posrequisito, estrutura_id)
-VALUES ('ED', 'Estruturas de Dados', 2, 'Obrigatória', 'Listas, pilhas, filas, árvores, grafos', 'ILP', NULL, NULL,
+VALUES ('ED', 'Estruturas de Dados', 2, 'Obrigatória', NULL, 'ILP', NULL, NULL,
         (SELECT id FROM estrutura_curso WHERE codigo='SI-2025'));
 
--- Mesmas disciplinas para CC (códigos diferentes para evitar conflito de UNIQUE)
 INSERT INTO componentes_curriculares (codigo, nome, nivel, tipo, ementa, prerequisito, corequisito, posrequisito, estrutura_id)
-VALUES ('MDIS_CC', 'Matemática Discreta', 1, 'Obrigatória', 'Conjuntos, relações, grafos, lógica, combinatória', NULL, NULL, NULL,
+VALUES ('MDIS_CC', 'Matemática Discreta', 1, 'Obrigatória', NULL, NULL, NULL, NULL,
         (SELECT id FROM estrutura_curso WHERE codigo='CC-2025'));
 
 INSERT INTO componentes_curriculares (codigo, nome, nivel, tipo, ementa, prerequisito, corequisito, posrequisito, estrutura_id)
-VALUES ('CALCA_CC', 'Cálculo A', 1, 'Obrigatória', 'Funções, limites, derivadas, aplicações', NULL, NULL, NULL,
+VALUES ('CALCA_CC', 'Cálculo A', 1, 'Obrigatória', NULL, NULL, NULL, NULL,
         (SELECT id FROM estrutura_curso WHERE codigo='CC-2025'));
 
 INSERT INTO componentes_curriculares (codigo, nome, nivel, tipo, ementa, prerequisito, corequisito, posrequisito, estrutura_id)
-VALUES ('ILP_CC', 'Introdução à Lógica de Programação', 1, 'Obrigatória', 'Algoritmos, estruturas de controle, funções', NULL, NULL, NULL,
+VALUES ('ILP_CC', 'Introdução à Lógica de Programação', 1, 'Obrigatória', NULL, NULL, NULL, NULL,
         (SELECT id FROM estrutura_curso WHERE codigo='CC-2025'));
 
 INSERT INTO componentes_curriculares (codigo, nome, nivel, tipo, ementa, prerequisito, corequisito, posrequisito, estrutura_id)
-VALUES ('ED_CC', 'Estruturas de Dados', 2, 'Obrigatória', 'Listas, pilhas, filas, árvores, grafos', 'ILP_CC', NULL, NULL,
+VALUES ('ED_CC', 'Estruturas de Dados', 2, 'Obrigatória', NULL, 'ILP_CC', NULL, NULL,
         (SELECT id FROM estrutura_curso WHERE codigo='CC-2025'));
 
 -- Horários (um por turma)
