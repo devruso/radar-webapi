@@ -3,6 +3,7 @@ package com.jangada.RADAR.models.dtos;
 import java.util.List;
 import java.util.Set;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Schema(description = "Dados do usuário do sistema RADAR")
 public class UsuarioDTO {
     private Long id;
     
