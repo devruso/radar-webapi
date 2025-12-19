@@ -1,11 +1,12 @@
 package com.jangada.RADAR.repositories;
 
-import com.jangada.RADAR.models.entities.AvaliacaoProfessor;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import com.jangada.RADAR.models.entities.AvaliacaoProfessor;
 
 @Repository
 public interface AvaliacaoProfessorRepository extends JpaRepository<AvaliacaoProfessor, Long> {

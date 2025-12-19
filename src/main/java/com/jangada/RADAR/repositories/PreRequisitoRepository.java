@@ -1,10 +1,11 @@
 package com.jangada.RADAR.repositories;
 
-import com.jangada.RADAR.models.entities.PreRequisito;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.jangada.RADAR.models.entities.PreRequisito;
 
 @Repository
 public interface PreRequisitoRepository extends JpaRepository<PreRequisito, Long> {
