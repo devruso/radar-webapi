@@ -1,6 +1,9 @@
 package com.jangada.RADAR.models.entities;
 
+import java.time.Instant;
+
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,6 +39,19 @@ public class Turma {
     private String professor;
     private String numero;
     private Byte tipo;
+    @Column(length = 20)
+    private String periodoLetivo;
+
+    @Column(length = 100)
+    private String source;
+
+    @Column(length = 160)
+    private String externalKey;
+    private boolean ativa;
+    private Instant updatedAt;
+
+    @Version
+    private Long version;
 
     @ManyToOne
     @JoinColumn(name = "componente_id")

@@ -3,12 +3,18 @@ package com.jangada.RADAR.repositories;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.jangada.RADAR.models.entities.PreRequisito;
 
 @Repository
 public interface PreRequisitoRepository extends JpaRepository<PreRequisito, Long> {
+
+    @Query("SELECT p FROM PreRequisito p " +
+           "JOIN FETCH p.componente " +
+           "JOIN FETCH p.componentePreRequisito")
+    List<PreRequisito> findAllWithComponents();
 
     List<PreRequisito> findByComponenteId(Long componenteId);
 

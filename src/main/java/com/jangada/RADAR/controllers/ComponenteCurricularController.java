@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jangada.RADAR.exceptions.ResourceNotFoundException;
@@ -30,8 +31,14 @@ public class ComponenteCurricularController {
     
     @GetMapping
     @Operation(summary = "Listar todos os componentes curriculares")
-    public ResponseEntity<List<ComponenteCurricularDTO>> listAll() {
-        List<ComponenteCurricularDTO> dtos = componenteRepository.findAll()
+    public ResponseEntity<List<ComponenteCurricularDTO>> listAll(
+        @RequestParam(required = false) String curso,
+        @RequestParam(defaultValue = "true") boolean somenteContextoAtivo
+    ) {
+        var components = curso == null || curso.isBlank()
+            ? componenteRepository.findAllWithTurmas()
+            : componenteRepository.findAllByCourseContext(curso.trim(), somenteContextoAtivo);
+        List<ComponenteCurricularDTO> dtos = components
                 .stream()
                 .map(ComponenteCurricularMapper::toDto)
                 .collect(Collectors.toList());
@@ -41,7 +48,7 @@ public class ComponenteCurricularController {
     @GetMapping("/{id}")
     @Operation(summary = "Buscar componente por ID")
     public ResponseEntity<ComponenteCurricularDTO> findById(@PathVariable Long id) {
-        return componenteRepository.findById(id)
+        return componenteRepository.findByIdWithTurmas(id)
                 .map(ComponenteCurricularMapper::toDto)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException("Componente com ID " + id + " não encontrado"));
@@ -50,7 +57,7 @@ public class ComponenteCurricularController {
     @GetMapping("/codigo/{codigo}")
     @Operation(summary = "Buscar componente por código")
     public ResponseEntity<ComponenteCurricularDTO> findByCodigo(@PathVariable String codigo) {
-        return componenteRepository.findByCodigo(codigo)
+        return componenteRepository.findByCodigoWithTurmas(codigo.trim().toUpperCase())
                 .map(ComponenteCurricularMapper::toDto)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException("Componente com código " + codigo + " não encontrado"));

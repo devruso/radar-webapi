@@ -19,6 +19,18 @@ public class ComponenteCurricularMapper {
                 .prerequisito(c.getPrerequisito())
                 .corequisito(c.getCorequisito())
                 .posrequisito(c.getPosrequisito())
+                .departamento(c.getDepartamento())
+                .nivelAcademico(c.getNivelAcademico())
+                .semestre(c.getSemestre())
+                .programa(c.getPrograma())
+                .objetivo(c.getObjetivo())
+                .metodologia(c.getMetodologia())
+                .avaliacaoAprendizagem(c.getAvaliacaoAprendizagem())
+                .bibliografia(c.getBibliografia())
+                .cargaHoraria(c.getCargaHoraria())
+                .ementasSources(c.getEmentasSources())
+                .ementasUpdatedAt(c.getEmentasUpdatedAt())
+                .ementasSyncedAt(c.getEmentasSyncedAt())
                 .turmasIds(c.getTurmas() == null ? null : c.getTurmas().stream().map(t -> t.getId()).collect(Collectors.toSet()))
                 .build();
     }

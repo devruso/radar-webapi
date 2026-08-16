@@ -4,9 +4,9 @@ import java.util.Set;
 
 import com.jangada.RADAR.models.dtos.AtualizarDisciplinasDTO;
 import com.jangada.RADAR.models.dtos.AtualizarTurnosDTO;
+import com.jangada.RADAR.models.dtos.AtualizarPerfilDTO;
 import com.jangada.RADAR.models.dtos.BanirProfessorDTO;
 import com.jangada.RADAR.models.dtos.LoginDTO;
-import com.jangada.RADAR.models.dtos.RegisterDTO;
 import com.jangada.RADAR.models.dtos.UsuarioCadastroDTO;
 import com.jangada.RADAR.models.dtos.UsuarioDTO;
 import com.jangada.RADAR.models.dtos.UsuarioTesteDTO;
@@ -18,7 +18,7 @@ public interface UsuarioService {
     
     /**
      * Cria um usuário teste (sem cadastro completo).
-     * Permite uso da aplicação sem login.
+     * O controller emite uma sessão JWT isolada para esse perfil temporário.
      */
     UsuarioDTO criarUsuarioTeste(UsuarioTesteDTO dto);
     
@@ -38,6 +38,8 @@ public interface UsuarioService {
      * Atualiza os turnos disponíveis do usuário (matutino, vespertino, noturno).
      */
     UsuarioDTO atualizarTurnos(Long usuarioId, AtualizarTurnosDTO dto);
+
+    UsuarioDTO atualizarPerfil(Long usuarioId, AtualizarPerfilDTO dto);
     
     /**
      * Adiciona um professor à lista de banidos do usuário.
@@ -59,11 +61,5 @@ public interface UsuarioService {
      * @throws ResourceNotFoundException se credenciais inválidas
      */
     UsuarioDTO login(LoginDTO dto);
-    
-    /**
-     * Registra novo usuário simples (apenas nome, email, senha).
-     * @throws IllegalStateException se email já existe
-     */
-    UsuarioDTO register(RegisterDTO dto);
 
 }

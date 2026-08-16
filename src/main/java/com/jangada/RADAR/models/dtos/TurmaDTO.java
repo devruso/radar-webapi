@@ -1,5 +1,7 @@
 package com.jangada.RADAR.models.dtos;
 
+import java.util.Map;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -32,4 +34,15 @@ public class TurmaDTO {
     private Long horarioId;
     private Long vagasId;
     private Long guiaId;
+
+    private String componenteCodigo;
+    private String componenteNome;
+    private String turno;
+    private Map<String, String> horarios;
+    private Short totalVagas;
+    private Short vagasDisponiveis;
+    private String periodoLetivo;
+    private String source;
+    private String externalKey;
+    private boolean ativa;
 }

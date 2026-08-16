@@ -4,9 +4,8 @@ import com.jangada.RADAR.mappers.TurmaMapper;
 import com.jangada.RADAR.models.dtos.TurmaDTO;
 import com.jangada.RADAR.models.entities.Turma;
 import com.jangada.RADAR.repositories.TurmaRepository;
-import com.jangada.RADAR.repositories.ComponenteCurricularRepository;
+import com.jangada.RADAR.repositories.CursoRepository;
 import com.jangada.RADAR.exceptions.ResourceNotFoundException;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,45 +17,49 @@ import java.util.stream.Collectors;
 public class TurmaController {
 
     private final TurmaRepository turmaRepository;
-    private final ComponenteCurricularRepository componenteRepository;
+    private final CursoRepository cursoRepository;
 
-    public TurmaController(TurmaRepository turmaRepository, ComponenteCurricularRepository componenteRepository) {
+    public TurmaController(
+            TurmaRepository turmaRepository,
+            CursoRepository cursoRepository) {
         this.turmaRepository = turmaRepository;
-        this.componenteRepository = componenteRepository;
+        this.cursoRepository = cursoRepository;
     }
 
     @GetMapping
-    public ResponseEntity<List<TurmaDTO>> listAll() {
-        // Usa query otimizada com FETCH JOIN para evitar N+1 queries
-        List<TurmaDTO> dtos = turmaRepository.findAllWithDetails().stream()
+    public ResponseEntity<List<TurmaDTO>> listAll(
+            @RequestParam(defaultValue = "false") boolean incluirInativas) {
+        List<Turma> classes = incluirInativas
+                ? turmaRepository.findAllWithDetails()
+                : turmaRepository.findAllActiveWithDetails();
+        List<TurmaDTO> dtos = classes.stream()
                 .map(TurmaMapper::toDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<TurmaDTO> getOne(@PathVariable Long id) {
-        return turmaRepository.findById(id)
-                .map(t -> ResponseEntity.ok(TurmaMapper.toDto(t)))
-                .orElseThrow(() -> new ResourceNotFoundException("Turma com ID " + id + " não encontrada"));
+    @GetMapping("/componente/{componenteId}")
+    public List<TurmaDTO> listByComponent(@PathVariable Long componenteId) {
+        return turmaRepository.findByComponenteId(componenteId).stream()
+                .map(TurmaMapper::toDto)
+                .toList();
     }
 
-    @PostMapping
-    public ResponseEntity<TurmaDTO> create(@Valid @RequestBody TurmaDTO dto) {
-        Turma t = new Turma();
-        t.setLocal(dto.getLocal());
-        t.setProfessor(dto.getProfessor());
-        t.setNumero(dto.getNumero());
-        t.setTipo(dto.getTipo());
-        
-        // Set component
-        if (dto.getComponenteId() != null) {
-            t.setComponenteCurricular(componenteRepository.findById(dto.getComponenteId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Componente curricular não encontrado")));
-        }
-        
-        Turma saved = turmaRepository.save(t);
-        return ResponseEntity.ok(TurmaMapper.toDto(saved));
+    @GetMapping("/curso/{cursoId}")
+    public List<TurmaDTO> listByCourse(@PathVariable Long cursoId) {
+        String courseName = cursoRepository.findById(cursoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Curso não encontrado"))
+                .getNome();
+        return turmaRepository.findAllActiveByCourseName(courseName).stream()
+                .map(TurmaMapper::toDto)
+                .toList();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TurmaDTO> getOne(@PathVariable Long id) {
+        return turmaRepository.findByIdWithDetails(id)
+                .map(t -> ResponseEntity.ok(TurmaMapper.toDto(t)))
+                .orElseThrow(() -> new ResourceNotFoundException("Turma com ID " + id + " não encontrada"));
     }
 
 }

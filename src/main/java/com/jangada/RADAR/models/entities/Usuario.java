@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.math.BigDecimal;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -47,6 +48,23 @@ public class Usuario {
     private Integer anoIngresso;
     private Integer mesIngresso;
     private Integer periodoAtual;
+
+    // SIGAA enrollment-priority inputs. Regular periods already exclude
+    // trancamento, suspensão and academic mobility periods.
+    @Column(nullable = false)
+    @Builder.Default
+    private Integer perfilInicial = 1;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Integer periodosRegularesCursados = 0;
+
+    @Column(precision = 4, scale = 2)
+    private BigDecimal coeficienteRendimento;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean statusFormando = false;
 
     // Flag para diferenciar usuário teste (sem cadastro) de usuário autenticado
     @Column(nullable = false)

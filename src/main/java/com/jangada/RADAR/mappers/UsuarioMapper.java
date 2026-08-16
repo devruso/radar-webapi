@@ -20,12 +20,17 @@ public class UsuarioMapper {
                 .anoIngresso(u.getAnoIngresso())
                 .mesIngresso(u.getMesIngresso())
                 .periodoAtual(u.getPeriodoAtual())
+                .perfilInicial(u.getPerfilInicial())
+                .periodosRegularesCursados(u.getPeriodosRegularesCursados())
+                .coeficienteRendimento(u.getCoeficienteRendimento())
+                .statusFormando(u.getStatusFormando())
                 .isTeste(u.getIsTeste())
                 .turnosLivres(u.getTurnosLivres())
                 .professoresExcluidos(u.getProfessoresExcluidos())
                 .disciplinasFeitas(u.getDisciplinasFeitas())
                 .turmasSelecionadasIds(u.getTurmasSelecionadas() == null ? null : u.getTurmasSelecionadas().stream().map(t -> t.getId()).collect(Collectors.toSet()))
                 .cursoId(u.getCurso() == null ? null : u.getCurso().getId())
+                .cursoNome(u.getCurso() == null ? null : u.getCurso().getNome())
                 .build();
     }
 
@@ -42,6 +47,10 @@ public class UsuarioMapper {
         u.setAnoIngresso(dto.getAnoIngresso());
         u.setMesIngresso(dto.getMesIngresso());
         u.setPeriodoAtual(dto.getPeriodoAtual());
+        u.setPerfilInicial(dto.getPerfilInicial());
+        u.setPeriodosRegularesCursados(dto.getPeriodosRegularesCursados());
+        u.setCoeficienteRendimento(dto.getCoeficienteRendimento());
+        u.setStatusFormando(dto.getStatusFormando());
         u.setIsTeste(dto.getIsTeste());
         u.setTurnosLivres(dto.getTurnosLivres());
         u.setProfessoresExcluidos(dto.getProfessoresExcluidos());

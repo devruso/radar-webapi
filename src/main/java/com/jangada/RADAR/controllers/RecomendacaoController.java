@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,11 +35,12 @@ public class RecomendacaoController {
     }
 
     @PostMapping("/gerar/{usuarioId}")
+    @PreAuthorize("@userAccess.canAccess(#usuarioId, authentication)")
     @Operation(
             summary = "Gerar recomendações de disciplinas",
             description = "Gera uma lista de disciplinas recomendadas para um aluno considerando: " +
                     "disciplinas já feitas, professores excluídos, vagas disponíveis, pré-requisitos, " +
-                    "dificuldade e rating de professores."
+                    "prioridades I-V da legenda oficial do SIGAA e, somente depois delas, rating de professores."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Recomendações geradas com sucesso"),
@@ -48,14 +50,15 @@ public class RecomendacaoController {
             @PathVariable
             @Parameter(description = "ID do usuário (aluno)")
             Long usuarioId,
-            @RequestParam(defaultValue = "burrinho")
-            @Parameter(description = "Método de recomendação: 'burrinho' (simples) ou 'busca' (futuro)")
+            @RequestParam(defaultValue = "busca")
+            @Parameter(description = "Método de recomendação: 'guloso' ou 'busca' sem conflitos")
             String metodo) {
         List<RecomendacaoTurmaDTO> result = recomendacaoService.recomendar(usuarioId, metodo);
         return ResponseEntity.ok(result);
     }
 
     @PostMapping("/avaliar-professor")
+    @PreAuthorize("@userAccess.canAccess(#usuarioId, authentication)")
     @Operation(
             summary = "Avaliar professor",
             description = "Registra a avaliação de um professor após a conclusão de uma disciplina. " +
@@ -89,22 +92,6 @@ public class RecomendacaoController {
                 nota,
                 comentario
         );
-        return ResponseEntity.ok(result);
-    }
-
-    @GetMapping("/professor/{professorNome}/avaliacoes")
-    @Operation(
-            summary = "Obter avaliações de um professor",
-            description = "Retorna todas as avaliações registradas para um professor específico"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Avaliações recuperadas com sucesso")
-    })
-    public ResponseEntity<List<AvaliacaoProfessorDTO>> obterAvaliacoesProfessor(
-            @PathVariable
-            @Parameter(description = "Nome do professor")
-            String professorNome) {
-        List<AvaliacaoProfessorDTO> result = recomendacaoService.obterAvaliacoesProfessor(professorNome);
         return ResponseEntity.ok(result);
     }
 

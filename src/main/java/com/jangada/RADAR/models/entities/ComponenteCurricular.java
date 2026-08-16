@@ -1,5 +1,6 @@
 package com.jangada.RADAR.models.entities;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,7 +10,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -41,15 +41,48 @@ public class ComponenteCurricular {
 
     private Short nivel;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String ementa;
 
     private String tipo;
 
     // Prerequisitos em formato simples (códigos separados por vírgula)
+    @Column(columnDefinition = "TEXT")
     private String prerequisito;
     private String corequisito;
     private String posrequisito;
+
+    @Column(columnDefinition = "TEXT")
+    private String equivalencias;
+
+    // Read-only catalog metadata synchronized from one or more Ementas APIs.
+    private String ementasExternalId;
+    private String departamento;
+    private String nivelAcademico;
+    private String semestre;
+
+    @Column(columnDefinition = "TEXT")
+    private String programa;
+
+    @Column(columnDefinition = "TEXT")
+    private String objetivo;
+
+    @Column(columnDefinition = "TEXT")
+    private String metodologia;
+
+    @Column(columnDefinition = "TEXT")
+    private String avaliacaoAprendizagem;
+
+    @Column(columnDefinition = "TEXT")
+    private String bibliografia;
+
+    private Integer cargaHoraria;
+
+    @Column(columnDefinition = "TEXT")
+    private String ementasSources;
+
+    private Instant ementasUpdatedAt;
+    private Instant ementasSyncedAt;
 
     @OneToMany(mappedBy = "componenteCurricular", cascade = CascadeType.ALL)
     @Builder.Default

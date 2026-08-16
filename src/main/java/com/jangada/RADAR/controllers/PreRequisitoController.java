@@ -4,18 +4,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jangada.RADAR.exceptions.ResourceNotFoundException;
 import com.jangada.RADAR.mappers.PreRequisitoMapper;
 import com.jangada.RADAR.models.dtos.PreRequisitoDTO;
-import com.jangada.RADAR.models.entities.ComponenteCurricular;
 import com.jangada.RADAR.models.entities.PreRequisito;
 import com.jangada.RADAR.repositories.ComponenteCurricularRepository;
 import com.jangada.RADAR.repositories.PreRequisitoRepository;
@@ -101,47 +97,4 @@ public class PreRequisitoController {
         return ResponseEntity.ok(preRequisitos);
     }
 
-    @PostMapping
-    @Operation(
-            summary = "Criar novo pré-requisito",
-            description = "Define uma relação de pré-requisito entre duas disciplinas"
-    )
-    public ResponseEntity<PreRequisitoDTO> criar(
-            @RequestParam
-            @Parameter(description = "ID do componente que terá pré-requisito")
-            Long componenteId,
-            @RequestParam
-            @Parameter(description = "ID do componente que é pré-requisito")
-            Long componentePreRequisitoId,
-            @RequestParam(defaultValue = "PREREQUISITO")
-            @Parameter(description = "Tipo de relação: PREREQUISITO, COREQUISITO ou POSREQUISITO")
-            String tipo) {
-
-        ComponenteCurricular componente = componenteRepository.findById(componenteId)
-                .orElseThrow(() -> new ResourceNotFoundException("Componente não encontrado"));
-
-        ComponenteCurricular componentePreReq = componenteRepository.findById(componentePreRequisitoId)
-                .orElseThrow(() -> new ResourceNotFoundException("Componente pré-requisito não encontrado"));
-
-        PreRequisito preRequisito = PreRequisito.builder()
-                .componente(componente)
-                .componentePreRequisito(componentePreReq)
-                .tipo(tipo)
-                .build();
-
-        PreRequisito saved = preRequisitoRepository.save(preRequisito);
-        return ResponseEntity.ok(PreRequisitoMapper.toDto(saved));
-    }
-
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Deletar um pré-requisito")
-    public ResponseEntity<Void> deletar(
-            @PathVariable
-            @Parameter(description = "ID do pré-requisito")
-            Long id) {
-        PreRequisito preRequisito = preRequisitoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Pré-requisito não encontrado"));
-        preRequisitoRepository.delete(preRequisito);
-        return ResponseEntity.noContent().build();
-    }
 }

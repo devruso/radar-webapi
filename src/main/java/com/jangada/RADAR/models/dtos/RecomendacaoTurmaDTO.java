@@ -16,4 +16,9 @@ public class RecomendacaoTurmaDTO {
     private Double scoreProfessor; // Score médio do professor (1-5, onde 5 é melhor)
     private String motivo; // Breve explicação da recomendação
     private Integer posicao; // Posição na lista ordenada
+    private Integer prioridadeMatricula;
+    private String categoriaPrioridade;
+    private Integer semestreCurricular;
+    private Integer semestreAcademico;
+    private String criterioDesempate;
 }

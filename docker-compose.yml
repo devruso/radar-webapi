@@ -2,31 +2,75 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: radar-postgres
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: radar
-      POSTGRES_USER: radar
-      POSTGRES_PASSWORD: radar123
+      POSTGRES_DB: ${POSTGRES_DB:-radar}
+      POSTGRES_USER: ${POSTGRES_USER:-radar}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-radar123}
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5433}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - radar-network
+
+  api:
+    build:
+      context: .
+    container_name: radar-api
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-radar}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-radar}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-radar123}
+      EMENTAS_API_BASE_URLS: ${EMENTAS_API_BASE_URLS:-http://host.docker.internal:3333/api,https://ementas.app.ic.ufba.br/api}
+      EMENTAS_API_EMAIL: ${EMENTAS_API_EMAIL:-}
+      EMENTAS_API_PASSWORD: ${EMENTAS_API_PASSWORD:-}
+      RADAR_CATALOG_SYNC_KEY: ${RADAR_CATALOG_SYNC_KEY:-change-me}
+      RADAR_OFERTAS_IMPORT_KEY: ${RADAR_OFERTAS_IMPORT_KEY:-change-me}
+      RADAR_LOG_LEVEL: ${RADAR_LOG_LEVEL:-INFO}
+      RADAR_JWT_SECRET: ${RADAR_JWT_SECRET:-radar-development-secret-change-before-deploy-2026}
+      RADAR_TOKEN_TTL: ${RADAR_TOKEN_TTL:-PT12H}
+      RADAR_ALLOWED_ORIGINS: ${RADAR_ALLOWED_ORIGINS:-http://localhost:3000}
+      DB_POOL_MAX_SIZE: ${DB_POOL_MAX_SIZE:-10}
+      DB_POOL_MIN_IDLE: ${DB_POOL_MIN_IDLE:-2}
+    ports:
+      - "${RADAR_API_PORT:-9090}:9090"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:9090/actuator/health/readiness"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
     networks:
       - radar-network
 
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: radar-pgadmin
+    profiles: ["tools"]
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@radar.com
-      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@radar.local}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin123}
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     ports:
       - "5050:80"
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     networks:
       - radar-network
 

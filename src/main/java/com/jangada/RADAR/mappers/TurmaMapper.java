@@ -17,6 +17,16 @@ public class TurmaMapper {
                 .horarioId(t.getHorario() == null ? null : t.getHorario().getId())
                 .vagasId(t.getVagas() == null ? null : t.getVagas().getId())
                 .guiaId(t.getGuiaMatricula() == null ? null : t.getGuiaMatricula().getId())
+                .componenteCodigo(t.getComponenteCurricular() == null ? null : t.getComponenteCurricular().getCodigo())
+                .componenteNome(t.getComponenteCurricular() == null ? null : t.getComponenteCurricular().getNome())
+                .turno(t.getHorario() == null ? null : t.getHorario().getTurno())
+                .horarios(t.getHorario() == null ? null : t.getHorario().getHorarios())
+                .totalVagas(t.getVagas() == null ? null : t.getVagas().getTotalVagas())
+                .vagasDisponiveis(t.getVagas() == null ? null : t.getVagas().getVagasDisponiveis())
+                .periodoLetivo(t.getPeriodoLetivo())
+                .source(t.getSource())
+                .externalKey(t.getExternalKey())
+                .ativa(t.isAtiva())
                 .build();
     }
 
@@ -28,6 +38,10 @@ public class TurmaMapper {
         t.setProfessor(dto.getProfessor());
         t.setNumero(dto.getNumero());
         t.setTipo(dto.getTipo());
+        t.setPeriodoLetivo(dto.getPeriodoLetivo());
+        t.setSource(dto.getSource());
+        t.setExternalKey(dto.getExternalKey());
+        t.setAtiva(dto.isAtiva());
         // associations must be set at service layer or by client
         return t;
     }

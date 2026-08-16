@@ -31,7 +31,7 @@ public class HorarioController {
     @GetMapping
     @Operation(summary = "Listar todos os horários")
     public ResponseEntity<List<HorarioDTO>> listAll() {
-        List<HorarioDTO> dtos = horarioRepository.findAll()
+        List<HorarioDTO> dtos = horarioRepository.findAllWithSlots()
                 .stream()
                 .map(HorarioMapper::toDto)
                 .collect(Collectors.toList());
@@ -41,7 +41,7 @@ public class HorarioController {
     @GetMapping("/{id}")
     @Operation(summary = "Buscar horário por ID")
     public ResponseEntity<HorarioDTO> findById(@PathVariable Long id) {
-        return horarioRepository.findById(id)
+        return horarioRepository.findByIdWithSlots(id)
                 .map(HorarioMapper::toDto)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException("Horário com ID " + id + " não encontrado"));

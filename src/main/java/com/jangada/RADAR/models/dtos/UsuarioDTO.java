@@ -2,6 +2,7 @@ package com.jangada.RADAR.models.dtos;
 
 import java.util.List;
 import java.util.Set;
+import java.math.BigDecimal;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -37,6 +38,10 @@ public class UsuarioDTO {
     private Integer anoIngresso;
     private Integer mesIngresso;
     private Integer periodoAtual;
+    private Integer perfilInicial;
+    private Integer periodosRegularesCursados;
+    private BigDecimal coeficienteRendimento;
+    private Boolean statusFormando;
 
     private Boolean isTeste;
 
@@ -46,5 +51,6 @@ public class UsuarioDTO {
 
     private Set<Long> turmasSelecionadasIds;
     private Long cursoId;
+    private String cursoNome;
 
 }

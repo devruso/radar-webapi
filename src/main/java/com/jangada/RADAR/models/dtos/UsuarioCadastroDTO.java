@@ -1,7 +1,11 @@
 package com.jangada.RADAR.models.dtos;
 
+import java.math.BigDecimal;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -40,5 +44,21 @@ public class UsuarioCadastroDTO {
     @NotNull(message = "Ano de ingresso é obrigatório")
     @Min(value = 2000, message = "Ano de ingresso inválido")
     private Integer anoIngresso;
+
+    @NotNull(message = "Perfil inicial é obrigatório")
+    @Min(value = 1, message = "Perfil inicial deve ser pelo menos 1")
+    private Integer perfilInicial;
+
+    @NotNull(message = "Quantidade de períodos regulares é obrigatória")
+    @Min(value = 0, message = "Quantidade de períodos regulares não pode ser negativa")
+    private Integer periodosRegularesCursados;
+
+    @NotNull(message = "Coeficiente de rendimento é obrigatório")
+    @DecimalMin(value = "0.0", message = "CR deve estar entre 0 e 10")
+    @DecimalMax(value = "10.0", message = "CR deve estar entre 0 e 10")
+    private BigDecimal coeficienteRendimento;
+
+    @NotNull(message = "Status formando é obrigatório")
+    private Boolean statusFormando;
 
 }

@@ -31,6 +31,7 @@ public class Vagas {
     private Long id;
 
     private Short totalVagas;
+    private Short vagasDisponiveis;
 
     @ElementCollection
     @CollectionTable(name = "vagas_reserva", joinColumns = @JoinColumn(name = "vagas_id"))

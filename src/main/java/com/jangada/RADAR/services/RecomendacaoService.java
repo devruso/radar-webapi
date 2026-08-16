@@ -9,7 +9,7 @@ public interface RecomendacaoService {
 
     /**
      * Gera uma lista de turmas recomendadas para o usuário informado.
-     * método: "burrinho" (simples filtro + ordenação) ou "busca" (futuro: algoritmo mais complexo)
+     * Método "guloso" para seleção simples ou "busca" para otimização por feixe.
      */
     List<RecomendacaoTurmaDTO> recomendar(Long usuarioId, String metodo);
 
@@ -18,11 +18,6 @@ public interface RecomendacaoService {
      * Escala: 1-5 (1=ruim, 5=excelente)
      */
     AvaliacaoProfessorDTO avaliarProfessor(Long usuarioId, String professorNome, Long componenteId, Integer nota, String comentario);
-
-    /**
-     * Obtém avaliações de um professor específico
-     */
-    List<AvaliacaoProfessorDTO> obterAvaliacoesProfessor(String professorNome);
 
     /**
      * Obtém score médio de um professor
